@@ -369,9 +369,10 @@ pub mod formats {
         #[cfg_attr(docsrs, doc(cfg(feature = "bincode")))]
         pub type SymmetricalBincode<T, O = bincode_crate::DefaultOptions> = Bincode<T, T, O>;
 
-        impl<Item, SinkItem> Deserializer<Item> for Bincode<Item, SinkItem>
+        impl<Item, SinkItem, O> Deserializer<Item> for Bincode<Item, SinkItem, O>
         where
             for<'a> Item: Deserialize<'a>,
+            O: Options + Copy,
         {
             type Error = io::Error;
 
@@ -383,9 +384,10 @@ pub mod formats {
             }
         }
 
-        impl<Item, SinkItem> Serializer<SinkItem> for Bincode<Item, SinkItem>
+        impl<Item, SinkItem, O> Serializer<SinkItem> for Bincode<Item, SinkItem, O>
         where
             SinkItem: Serialize,
+            O: Options + Copy,
         {
             type Error = io::Error;
 
